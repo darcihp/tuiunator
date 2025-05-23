@@ -1,13 +1,22 @@
 #include <esp_now.h>
 #include <WiFi.h>
+#include <Deneyap_Servo.h>
+
+Servo myservo;
 
 // Structure example to receive data
 // Must match the sender structure
 typedef struct struct_message {
+    /*
     char a[32];
     int b;
     float c;
     bool d;
+    */
+    int vrx;
+    int vry;
+    bool btn_1;
+    bool btn_2;
 } struct_message;
 
 // Create a struct_message called myData
@@ -18,15 +27,18 @@ void OnDataRecv(const uint8_t * mac, const uint8_t *incomingData, int len) {
   memcpy(&myData, incomingData, sizeof(myData));
   Serial.print("Bytes received: ");
   Serial.println(len);
-  Serial.print("Char: ");
-  Serial.println(myData.a);
-  Serial.print("Int: ");
-  Serial.println(myData.b);
-  Serial.print("Float: ");
-  Serial.println(myData.c);
-  Serial.print("Bool: ");
-  Serial.println(myData.d);
+  Serial.print("vrx: ");
+  Serial.println(myData.vrx);
+  Serial.print("vry: ");
+  Serial.println(myData.vry);
+  Serial.print("btn_1: ");
+  Serial.println(myData.btn_1);
+  Serial.print("btn_2: ");
+  Serial.println(myData.btn_2);
   Serial.println();
+
+  int maped_vrx = map(myData.vrx, 0, 4095, 0, 180);
+  myservo.write(maped_vrx);
 }
  
 void setup() {
@@ -45,8 +57,10 @@ void setup() {
   // Once ESPNow is successfully Init, we will register for recv CB to
   // get recv packer info
   esp_now_register_recv_cb(OnDataRecv);
+
+  myservo.attach(5);
 }
  
 void loop() {
-
+  
 }
