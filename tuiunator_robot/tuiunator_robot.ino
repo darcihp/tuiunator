@@ -3,16 +3,10 @@
 #include <Deneyap_Servo.h>
 
 Servo myservo;
+bool connection;
 
-// Structure example to receive data
-// Must match the sender structure
+
 typedef struct struct_message {
-    /*
-    char a[32];
-    int b;
-    float c;
-    bool d;
-    */
     int vrx;
     int vry;
     bool btn_1;
@@ -24,7 +18,9 @@ struct_message myData;
 
 // callback function that will be executed when data is received
 void OnDataRecv(const uint8_t * mac, const uint8_t *incomingData, int len) {
+  connection = true;
   memcpy(&myData, incomingData, sizeof(myData));
+  /*
   Serial.print("Bytes received: ");
   Serial.println(len);
   Serial.print("vrx: ");
@@ -36,9 +32,8 @@ void OnDataRecv(const uint8_t * mac, const uint8_t *incomingData, int len) {
   Serial.print("btn_2: ");
   Serial.println(myData.btn_2);
   Serial.println();
-
-  int maped_vrx = map(myData.vrx, 0, 4095, 0, 180);
-  myservo.write(maped_vrx);
+  */
+  myservo.write(myData.vrx);
 }
  
 void setup() {
@@ -53,14 +48,19 @@ void setup() {
     Serial.println("Error initializing ESP-NOW");
     return;
   }
-  
-  // Once ESPNow is successfully Init, we will register for recv CB to
-  // get recv packer info
+
   esp_now_register_recv_cb(OnDataRecv);
 
   myservo.attach(5);
+
+  connection = false;
 }
  
 void loop() {
-  
+  if(connection == false)
+  {
+    myservo.write(90);
+  }
+  connection = false;
+  delay(100);
 }
