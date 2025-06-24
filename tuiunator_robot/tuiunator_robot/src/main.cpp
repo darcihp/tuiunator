@@ -66,9 +66,9 @@ void setup() {
   pinMode(arm_e, OUTPUT);
   pinMode(arm_d, OUTPUT);
 
-  digitalWrite(arm_e, LOW);
+  digitalWrite(arm_e, HIGH);
   delay(1);
-  digitalWrite(arm_d, LOW);
+  digitalWrite(arm_d, HIGH);
   delay(1);
 }
 
@@ -76,9 +76,9 @@ void loop() {
   if (connection == false) {
     myservo_e.write(90);
     myservo_d.write(90);
-    digitalWrite(arm_e, LOW);
+    digitalWrite(arm_e, HIGH);
     delay(1);
-    digitalWrite(arm_d, LOW);
+    digitalWrite(arm_d, HIGH);
     delay(1);
   }
   connection = false;

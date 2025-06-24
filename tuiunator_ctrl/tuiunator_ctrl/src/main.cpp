@@ -1,11 +1,11 @@
 #include <esp_now.h>
 #include <WiFi.h>
-#include <ToneESP32.h>
+#include <Tone32.h>
 
-#define BUZZER_PIN 4
-#define BUZZER_CHANNEL 0
+//#define BUZZER_PIN 4
+//#define BUZZER_CHANNEL 0
 
-ToneESP32 buzzer(BUZZER_PIN, BUZZER_CHANNEL);
+//ToneESP32 buzzer(BUZZER_PIN, BUZZER_CHANNEL);
 
 /*
 Constantes
@@ -25,7 +25,7 @@ int vry_max_read;
 int vry_min_read;
 
 
-uint8_t broadcastAddress[] = { 0x10, 0x06, 0x1C, 0x81, 0x28, 0x78 };
+uint8_t broadcastAddress[] = { 0xB0, 0xA7, 0x32, 0xDC, 0xF0, 0xDC };
 
 // Structure example to send data
 // Must match the receiver structure
@@ -170,7 +170,7 @@ void loop() {
     myData.vrx = 180;
     myData.vry = 0;
 
-    buzzer.tone(NOTE_C4, 50);
+    //buzzer.tone(NOTE_C4, 50);
     digitalWrite(out_1, HIGH);
     //buzzer.noTone();
   }
