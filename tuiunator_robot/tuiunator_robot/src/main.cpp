@@ -23,7 +23,7 @@ struct_message myData;
 // callback function that will be executed when data is received
 void OnDataRecv(const uint8_t *mac, const uint8_t *incomingData, int len) {
   connection = true;
-  memcpy(&myData, incomingData, sizeof(myData));
+  memcpy(&myData, incomingData, sizeof(myData)); 
   /*
   Serial.print("Bytes received: ");
   Serial.println(len);
@@ -41,6 +41,32 @@ void OnDataRecv(const uint8_t *mac, const uint8_t *incomingData, int len) {
   */
   myservo_e.write(myData.vrx - myData.vry);
   myservo_d.write(myData.vrx + myData.vry);
+
+  
+  bool btn_1_h_r = myData.btn_1;
+  bool btn_2_h_r = myData.btn_2;
+
+  if (btn_1_h_r)
+  {
+    digitalWrite(arm_e, LOW);
+    delay(1);
+  }
+  else
+  {
+    digitalWrite(arm_e, HIGH);
+    delay(1);
+  }
+
+  if (btn_2_h_r)
+  {
+    digitalWrite(arm_d, LOW);
+    delay(1);
+  }
+  else
+  {
+    digitalWrite(arm_d, HIGH);
+    delay(1);
+  }
 }
 
 void setup() {

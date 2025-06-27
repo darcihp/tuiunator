@@ -13,8 +13,9 @@ Constantes
 const int vrx = 34;
 const int vry = 35;
 const int btn_1_h = 27;
+const int btn_2_h = 26;
 
-const int out_1 = 12;
+//const int out_1 = 12;
 
 int vrx_read;
 int vrx_max_read;
@@ -25,7 +26,7 @@ int vry_max_read;
 int vry_min_read;
 
 
-uint8_t broadcastAddress[] = { 0xB0, 0xA7, 0x32, 0xDC, 0xF0, 0xDC };
+uint8_t broadcastAddress[] = { 0xC8, 0x2E, 0x18, 0xF7, 0xA3, 0x28 };
 
 // Structure example to send data
 // Must match the receiver structure
@@ -119,9 +120,10 @@ void setup() {
   //Serial.println(vrx_min_read);
 
   pinMode(btn_1_h, INPUT_PULLUP);
-  pinMode(out_1, OUTPUT);
+  pinMode(btn_2_h, INPUT_PULLUP);
+  //pinMode(out_1, OUTPUT);
 
-  digitalWrite(out_1, LOW);
+  //digitalWrite(out_1, LOW);
   
 }
 
@@ -159,26 +161,25 @@ void loop() {
     }
   }
 
-  bool btn_1_h_r = digitalRead(btn_1_h);
+  myData.vrx = vrx_map;
+  myData.vry = vry_map;
 
-  if (btn_1_h_r) {
-    myData.vrx = vrx_map;
-    myData.vry = vry_map;
-    digitalWrite(out_1, LOW);
+  
+  bool btn_1_h_r = digitalRead(btn_1_h);
+  if (btn_1_h_r) { 
+    myData.btn_1 = false;
 
   } else {
-    myData.vrx = 180;
-    myData.vry = 0;
-
-    //buzzer.tone(NOTE_C4, 50);
-    digitalWrite(out_1, HIGH);
-    //buzzer.noTone();
+    myData.btn_1 = true;
   }
 
-  myData.btn_1 = false;
-  myData.btn_2 = true;
+  bool btn_2_h_r = digitalRead(btn_2_h);
+  if (btn_2_h_r) { 
+    myData.btn_2 = false;
 
-
+  } else {
+    myData.btn_2 = true;
+  }
 
   // Send message via ESP-NOW
   esp_err_t result = esp_now_send(broadcastAddress, (uint8_t *)&myData, sizeof(myData));
