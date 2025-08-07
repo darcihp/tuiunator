@@ -1,3 +1,6 @@
+#define TYPE 2
+
+#if TYPE == 2
 #include <esp_now.h>
 #include <WiFi.h>
 #include <Tone32.h>
@@ -12,8 +15,10 @@ Constantes
 */
 const int vrx = 34;
 const int vry = 35;
-const int btn_1_h = 27;
-const int btn_2_h = 26;
+const int btn_b_l = 32;
+const int btn_b_r = 33;
+const int btn_r_l = 25;
+const int btn_r_r = 26;
 
 //const int out_1 = 12;
 
@@ -26,7 +31,8 @@ int vry_max_read;
 int vry_min_read;
 
 
-uint8_t broadcastAddress[] = { 0xC8, 0x2E, 0x18, 0xF7, 0xA3, 0x28 };
+//uint8_t broadcastAddress[] = { 0xC8, 0x2E, 0x18, 0xF7, 0xA3, 0x28 };
+uint8_t broadcastAddress[] = { 0xC8, 0x2E, 0x18, 0xF8, 0x1B, 0x2C };
 
 // Structure example to send data
 // Must match the receiver structure
@@ -34,8 +40,10 @@ typedef struct struct_message {
   //char a[32];
   int vrx;
   int vry;
-  bool btn_1;
-  bool btn_2;
+  bool btn_b_l;
+  bool btn_b_r;
+  bool btn_r_l;
+  bool btn_r_r;
   //float c;
   //bool d;
 } struct_message;
@@ -119,8 +127,10 @@ void setup() {
   //Serial.println(vrx_max_read);
   //Serial.println(vrx_min_read);
 
-  pinMode(btn_1_h, INPUT_PULLUP);
-  pinMode(btn_2_h, INPUT_PULLUP);
+  pinMode(btn_b_l, INPUT_PULLUP);
+  pinMode(btn_b_r, INPUT_PULLUP);
+  pinMode(btn_r_l, INPUT_PULLUP);
+  pinMode(btn_r_r, INPUT_PULLUP);
   //pinMode(out_1, OUTPUT);
 
   //digitalWrite(out_1, LOW);
@@ -165,20 +175,36 @@ void loop() {
   myData.vry = vry_map;
 
   
-  bool btn_1_h_r = digitalRead(btn_1_h);
-  if (btn_1_h_r) { 
-    myData.btn_1 = false;
+  bool btn_b_l_r = digitalRead(btn_b_l);
+  if (btn_b_l_r) { 
+    myData.btn_b_l = false;
 
   } else {
-    myData.btn_1 = true;
+    myData.btn_b_l = true;
   }
 
-  bool btn_2_h_r = digitalRead(btn_2_h);
-  if (btn_2_h_r) { 
-    myData.btn_2 = false;
+  bool btn_b_r_r = digitalRead(btn_b_r);
+  if (btn_b_r_r) { 
+    myData.btn_b_r = false;
 
   } else {
-    myData.btn_2 = true;
+    myData.btn_b_r = true;
+  }
+
+  bool btn_r_l_r = digitalRead(btn_r_l);
+  if (btn_r_l_r) { 
+    myData.btn_r_l = false;
+
+  } else {
+    myData.btn_r_l = true;
+  }
+
+  bool btn_r_r_r = digitalRead(btn_r_r);
+  if (btn_r_r_r) { 
+    myData.btn_r_r = false;
+
+  } else {
+    myData.btn_r_r = true;
   }
 
   // Send message via ESP-NOW
@@ -195,3 +221,4 @@ void loop() {
 
   delay(10);
 }
+#endif
