@@ -11,10 +11,15 @@ const int arm_e = 17;
 const int arm_d = 19;
 
 typedef struct struct_message {
+  //char a[32];
   int vrx;
   int vry;
-  bool btn_1;
-  bool btn_2;
+  bool btn_b_l;
+  bool btn_b_r;
+  bool btn_r_l;
+  bool btn_r_r;
+  //float c;
+  //bool d;
 } struct_message;
 
 // Create a struct_message called myData
@@ -39,12 +44,15 @@ void OnDataRecv(const uint8_t *mac, const uint8_t *incomingData, int len) {
   Serial.println(myData.btn_2);
   Serial.println();
   */
-  myservo_e.write(myData.vrx - myData.vry);
-  myservo_d.write(myData.vrx + myData.vry);
 
+  int m_vrx = map(myData.vrx, 0, 180, -90, 90);
+  int m_vry = map(myData.vry, -90, 90, 180, 0);
+
+  myservo_e.write(m_vrx + m_vry);
+  myservo_d.write(m_vry - m_vrx);
   
-  bool btn_1_h_r = myData.btn_1;
-  bool btn_2_h_r = myData.btn_2;
+  bool btn_1_h_r = myData.btn_b_r;
+  bool btn_2_h_r = myData.btn_b_l;
 
   if (btn_1_h_r)
   {
